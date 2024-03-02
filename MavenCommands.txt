@@ -1,0 +1,48 @@
+Maven is a popular build automation tool primarily used for Java projects. It simplifies the build process by managing dependencies, compiling source code, and packaging artifacts. Here's a list of commonly used Maven commands along with brief descriptions:
+
+1. `mvn clean`:
+   - Cleans the project by removing the target directory and all generated files.
+
+2. `mvn compile`:
+   - Compiles the source code of the project.
+
+3. `mvn test`:
+   - Runs unit tests for the project.
+
+4. `mvn package`:
+   - Packages the compiled code and resources into a distributable format, such as a JAR, WAR, or EAR file.
+
+5. `mvn install`:
+   - Installs the project's artifacts into the local Maven repository, making them available for other projects to use as dependencies.
+
+6. `mvn deploy`:
+   - Deploys the project's artifacts to a remote repository, such as Nexus or Artifactory, making them available for other developers or projects.
+
+7. `mvn site`:
+   - Generates project documentation, such as project reports, test reports, and code metrics, into a website format.
+
+8. `mvn clean install`:
+   - Cleans the project, compiles the source code, runs tests, and installs the artifacts into the local repository.
+
+9. `mvn clean package`:
+   - Cleans the project, compiles the source code, and packages the artifacts without installing them into the local repository.
+
+10. `mvn clean test`:
+    - Cleans the project, compiles the source code, and runs tests without packaging or installing the artifacts.
+
+11. `mvn dependency:tree`:
+    - Displays the project's dependency tree, showing all dependencies and transitive dependencies.
+
+12. `mvn dependency:resolve`:
+    - Resolves dependencies for the project and downloads them to the local repository.
+
+13. `mvn dependency:purge-local-repository`:
+    - Removes all dependencies from the local repository.
+
+14. `mvn help:describe`:
+    - Displays information about Maven goals, plugins, and their configurations.
+
+15. `mvn archetype:generate`:
+    - Generates a new Maven project from an archetype (project template).
+
+These are some of the most commonly used Maven commands. You can find more detailed information about each command and its options in the Maven documentation or by running `mvn --help` to see the available plugins and their goals.
