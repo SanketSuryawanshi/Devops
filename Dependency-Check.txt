@@ -1,0 +1,59 @@
+sudo apt-get update
+
+sudo apt install openjdk-17-jre-headless
+
+VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
+
+curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
+
+./bin/dependency-check.sh -h
+
+sudo apt-get update
+
+sudo apt install maven
+
+mvn clean package -DskipTests=true
+
+./bin/dependency-check.sh --out . --scan /target
+
+>> OWASP : DependencyCheck Tool > Basically Scan our JAR/WAR file for Vulnerability analysis 
+>> EPC : Emigration Platform Check Tool 
+>> EPC divides our dependencies into > 3 Types :
+
+[1] Vendor	: <group_id>
+[2] Product : <artifact_id>
+[3] VERSION : <version> 
+
+>> It will download NVD : National Vulnerability Database for scanning our dependencies
+
+pipeline {
+  agent any
+  
+  tools{
+      maven 'maven'
+  }
+
+  stages {
+      stage('Git Checkout') {
+          steps {
+              git branch: 'main', url: 'https://github.com/jaiswaladi246/Ekart.git'
+          }
+      }
+      stage('Build'){
+          steps{
+              sh "mvn package -DskipTests=true"
+          }
+      }
+      stage('DP-Check'){
+          steps{
+              dependencyCheck additionalArguments: '--scan target/', odcInstallation: 'DC'
+              dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+          }
+      }
+  }
+  post{
+      always{
+          echo 'Pipeline Executed Succesfully'
+      }
+  }
+}
