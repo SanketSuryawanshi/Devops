@@ -1,15 +1,19 @@
-> Virtualization is a technology that allows you to create multiple virtual instances of computer resources such as operating systems, storage, and network resources on a single physical hardware system. 
+> Virtualization is a technology that allows you to create multiple virtual instances of computer resources such as operating systems
+> storage, and network resources on a single physical hardware system. 
 > These virtual instances, often referred to as virtual machines (VMs), behave like independent computers with their own operating systems and applications.
 
 Virtualization provides several benefits:
 
-1. **Resource Optimization**: Virtualization enables better utilization of physical hardware resources by running multiple virtual machines on a single physical server. This can lead to cost savings and improved efficiency.
+1. **Resource Optimization**: Virtualization enables better utilization of physical hardware resources by running multiple virtual machines on a single physical server.
+This can lead to cost savings and improved efficiency.
 
-2. **Isolation**: Each virtual machine is isolated from other virtual machines and the underlying physical hardware. This isolation provides security benefits and prevents one virtual machine from affecting others in case of issues.
+2. **Isolation**: Each virtual machine is isolated from other virtual machines and the underlying physical hardware. This isolation provides security benefits and 
+prevents one virtual machine from affecting others in case of issues.
 
 3. **Flexibility**: Virtualization allows for easy creation, deletion, and migration of virtual machines, providing flexibility in managing computing resources.
 
-4. **Testing and Development**: Virtualization is commonly used for testing and development purposes, allowing developers to create and test applications in isolated environments without affecting production systems.
+4. **Testing and Development**: Virtualization is commonly used for testing and development purposes, allowing developers to create and test applications in isolated environments
+without affecting production systems.
 
 > Hyper-V is Microsoft's virtualization platform that provides hardware virtualization for running multiple virtual machines on a single physical server. 
 > It is available as a role in Windows Server operating systems and as a standalone product for Windows 10 Professional and Enterprise editions.
@@ -17,3 +21,6 @@ Virtualization provides several benefits:
 > Two types of virtualization : Bare Metal | Hoisted Virtulization
 > While bare metal hypervisors run directly on the computing hardware
 > hosted hypervisors run within the operating system of the host machine. Although hosted hypervisors run within the OS, additional operating systems can be installed on top of it.
+
+
+> DEPLOYMENY OF THREE TIER APPLICATION : https://github.com/krishnaacharyaa/wanderlust/
