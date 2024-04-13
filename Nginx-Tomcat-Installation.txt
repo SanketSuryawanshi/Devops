@@ -1,0 +1,49 @@
+# Update System Packages
+apt-get update
+apt-get upgrade -y
+
+# Install nginx
+apt-get install nginx
+
+>systemctl status nginx
+> nginx default works on port 80
+> nginx is powerfull & efficeint web server as compared to other because of it's architecture 
+> It works on Parent - Child Process, there is one Parent process and multiple child process which handles the request
+> Nginx is also works as Load Balancing & Reverse Proxy
+> Instead of exposing port of our application, we can configure reverse proxy of our application
+
+> Default ROOT folder :  /var/www/html  : We can store all static content files here
+> Nginx configuration :  /etc/nginx/site-enabled :   make changes in default file for configuration
+
+> EXAMPLE : 
+
+location / {
+        proxy_pass http://127.0.0.1:8000;
+}
+
+location /api {
+       proxy_pass http://127.0.0.1:8000/api;
+}
+
+# Install tomcat 9 
+apt-get install tomcat9
+
+# tomcat9 admin GUI
+apt-get install tomcat9-admin
+
+> default root directory : /var/lib/tomcat9/webapps/   :  To server the web files 
+> default logs directory : /var/lib/tomcat9/logs
+> aoache-tomcat default works on port 8080
+> to access admin pannel :  <IP-ADDRESS>:8080/manager
+> systemctl status tomcat9
+> ps -ef | grep tomcat9
+> all configurations are stored at /etc/tomcat9
+> To change port no edit server.xml configuration file 
+> <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" />
+> To get tomcat GUI edit tomcat-users.xml
+> <tomcat-users>
+    <role rolename="manager-gui"/>
+    <role rolename="manager-script"/>
+    <user username="admin" password="your_password" roles="manager-gui,manager-script"/>
+</tomcat-users>
+
