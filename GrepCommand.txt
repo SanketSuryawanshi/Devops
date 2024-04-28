@@ -1,5 +1,10 @@
-grep    :
-egrep   :
-fgrep   :
-zgrep   :
-pdfgrep :
+grep    : grep <key-word> <file-name>
+egrep   : egrep "<key-word-1>|<key-word-2>" <file-name>>
+pgrep   : pgrep <process-name>
+fgrep   : fgrep <key-word> <file-name>   => If you have Specail keywords to seach >> fgrep hello.buddy <file> >> So it will not considered . as wild character
+zgrep   : zgrep <key-word> <zipeed-file-name>  => To search on zipped files
+pdfgrep : pdfgrep <key-word> <pdf-file-name>
+
+
+.  >> Actual One Character
+*  >> One or More Occurence
