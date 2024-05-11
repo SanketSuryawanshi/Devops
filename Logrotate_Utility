@@ -1,0 +1,179 @@
+>> logrotate
+
+ubuntu@ip-172-31-26-211:/$ logrotate
+logrotate 3.21.0 - Copyright (C) 1995-2001 Red Hat, Inc.
+This may be freely redistributed under the terms of the GNU General Public License
+
+Usage: logrotate [-dfv?] [-d|--debug] [-f|--force] [-m|--mail=command] [-s|--state=statefile] [--skip-state-lock] [--wait-for-state-lock]
+        [-v|--verbose] [-l|--log=logfile] [--version] [-?|--help] [--usage] [OPTION...] <configfile>
+
+
+>> logs location :  /var/log
+>> config files  :  /etc/logrotate.conf |  /etc/logrotate.d
+
+>> Logrotate Configuration : Defined Configuration so how can we rotate logs either Weekly | Daily | then rotate 4 means keep 4 backups most | Compress or not
+
+ubuntu@ip-172-31-26-211:/$ cat /etc/logrotate.conf
+# see "man logrotate" for details
+
+# global options do not affect preceding include directives
+
+# rotate log files weekly
+weekly
+
+# use the adm group by default, since this is the owning group
+# of /var/log/.
+su root adm
+
+# keep 4 weeks worth of backlogs
+rotate 4
+
+# create new (empty) log files after rotating old ones
+create
+
+# use date as a suffix of the rotated file
+#dateext
+
+# uncomment this if you want your log files compressed
+#compress
+
+# packages drop log rotation information into this directory
+include /etc/logrotate.d
+
+# system-specific logs may also be configured here.
+ubuntu@ip-172-31-26-211:/$
+
+
+>> logrotate.d >> Contains configuration for seprate logs
+
+ubuntu@ip-172-31-26-211:/$ cd /etc/logrotate.d/
+ubuntu@ip-172-31-26-211:/etc/logrotate.d$ ls -lrt
+total 56
+-rw-r--r-- 1 root root 145 Oct 14  2019 wtmp
+-rw-r--r-- 1 root root 130 Oct 14  2019 btmp
+-rw-r--r-- 1 root root 126 Apr 22  2022 apport
+-rw-r--r-- 1 root root 209 May 16  2023 ufw
+-rw-r--r-- 1 root root 329 Nov 30 22:32 nginx
+-rw-r--r-- 1 root root  91 Jan  4 21:08 bootlog
+-rw-r--r-- 1 root root 112 Feb  5 02:31 dpkg
+-rw-r--r-- 1 root root 120 Feb  5 02:31 alternatives
+-rw-r--r-- 1 root root 235 Feb 12 17:50 unattended-upgrades
+-rw-r--r-- 1 root root 248 Mar 22 02:28 rsyslog
+-rw-r--r-- 1 root root 173 Mar 22 10:11 apt
+-rw-r--r-- 1 root root 160 Apr  2 01:28 chrony
+-rw-r--r-- 1 root root 270 Apr  2 13:13 ubuntu-pro-client
+-rw-r--r-- 1 root root 144 Apr  5 23:18 cloud-init
+ubuntu@ip-172-31-26-211:/etc/logrotate.d$
+ubuntu@ip-172-31-26-211:/etc/logrotate.d$ cat nginx
+/var/log/nginx/*.log {
+        daily
+        missingok
+        rotate 14
+        compress
+        delaycompress
+        notifempty
+        create 0640 www-data adm
+        sharedscripts
+        prerotate
+                if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+                        run-parts /etc/logrotate.d/httpd-prerotate; \
+                fi \
+        endscript
+        postrotate
+                invoke-rc.d nginx rotate >/dev/null 2>&1
+        endscript
+}
+
+
+PRACTICAL 
+
+
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+root@ip-172-31-26-211:/var/log/myapp# touch my_application.log
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+-rw-r--r-- 1 root root 0 May 11 11:43 my_application.log
+root@ip-172-31-26-211:/var/log/myapp# vi /etc/logrotate.d/myapp
+root@ip-172-31-26-211:/var/log/myapp# cat /etc/logrotate.d/myapp
+/var/logs/myapp/*.log{
+        daily
+        size 10M
+        compress
+}
+
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+-rw-r--r-- 1 root root 0 May 11 11:43 my_application.log
+root@ip-172-31-26-211:/var/log/myapp# truncate -s 15M my_application.log
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+-rw-r--r-- 1 root root 15728640 May 11 11:46 my_application.log
+
+>> but logrotate will not check the file for each and every minutes
+
+>> Trigger Manually : logrotate /etc/logrotate.conf
+
+
+root@ip-172-31-26-211:/var/log/myapp# logrotate -d /etc/logrotate.conf
+warning: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.
+
+rotating pattern: /var/log/myapp/*.log 10485760 bytes (4 rotations)
+empty log files are rotated, old logs are removed
+switching euid from 0 to 0 and egid from 0 to 4 (pid 1284)
+considering log /var/log/myapp/my_application.log
+Creating new state
+  Now: 2024-05-11 11:50
+  Last rotated at 2024-05-11 11:00
+  log needs rotating
+rotating log /var/log/myapp/my_application.log, log->rotateCount is 4
+dateext suffix '-20240511'
+glob pattern '-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+renaming /var/log/myapp/my_application.log.4 to /var/log/myapp/my_application.log.5 (rotatecount 4, logstart 1, i 4),
+renaming /var/log/myapp/my_application.log.3 to /var/log/myapp/my_application.log.4 (rotatecount 4, logstart 1, i 3),
+renaming /var/log/myapp/my_application.log.2 to /var/log/myapp/my_application.log.3 (rotatecount 4, logstart 1, i 2),
+renaming /var/log/myapp/my_application.log.1 to /var/log/myapp/my_application.log.2 (rotatecount 4, logstart 1, i 1),
+log /var/log/myapp/my_application.log.5 doesn't exist -- won't try to dispose of it
+renaming /var/log/myapp/my_application.log to /var/log/myapp/my_application.log.1
+creating new /var/log/myapp/my_application.log mode = 0644 uid = 0 gid = 0
+switching euid from 0 to 0 and egid from 4 to 0 (pid 1284)
+
+
+
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+-rw-r--r-- 1 root root 15728640 May 11 11:46 my_application.log
+root@ip-172-31-26-211:/var/log/myapp# logrotate /etc/logrotate.conf
+root@ip-172-31-26-211:/var/log/myapp# ls -lrt
+total 0
+-rw-r--r-- 1 root root 15728640 May 11 11:46 my_application.log.1
+-rw-r--r-- 1 root root        0 May 11 11:51 my_application.log
+root@ip-172-31-26-211:/var/log/myapp#
+
+
+
+root@ip-172-31-26-211:/var/log/myapp# ls -lrth
+total 16K
+-rw-r--r-- 1 root root 15K May 11 11:54 my_application.log.1.gz
+-rw-r--r-- 1 root root   0 May 11 11:54 my_application.log
+root@ip-172-31-26-211:/var/log/myapp#
+
+
+>> But this utility will not alway check which files is growing and need to trigger
+>> systemctl status logrotate.time
+
+root@ip-172-31-26-211:/var/log/myapp# systemctl status logrotate.timer
+● logrotate.timer - Daily rotation of log files
+     Loaded: loaded (/usr/lib/systemd/system/logrotate.timer; enabled; preset: enabled)
+     Active: active (waiting) since Sat 2024-05-11 11:13:47 UTC; 43min ago
+    Trigger: Sun 2024-05-12 00:00:00 UTC; 12h left
+   Triggers: ● logrotate.service
+       Docs: man:logrotate(8)
+             man:logrotate.conf(5)
+
+May 11 11:13:47 ip-172-31-26-211 systemd[1]: Started logrotate.timer - Daily rotation of log files.
+
+Sometimes this logrotate has cron scheduled in crontab check >> cd /etc/cron.dailty/
+
+
+
