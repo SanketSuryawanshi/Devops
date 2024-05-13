@@ -1,0 +1,131 @@
+
+ /$$$$$$$   /$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$$ /$$$$$$$ 
+| $$__  $$ /$$__  $$ /$$__  $$| $$  /$$/| $$_____/| $$__  $$
+| $$  \ $$| $$  \ $$| $$  \__/| $$ /$$/ | $$      | $$  \ $$
+| $$  | $$| $$  | $$| $$      | $$$$$/  | $$$$$   | $$$$$$$/
+| $$  | $$| $$  | $$| $$      | $$  $$  | $$__/   | $$__  $$
+| $$  | $$| $$  | $$| $$    $$| $$\  $$ | $$      | $$  \ $$
+| $$$$$$$/|  $$$$$$/|  $$$$$$/| $$ \  $$| $$$$$$$$| $$  | $$
+|_______/  \______/  \______/ |__/  \__/|________/|__/  |__/
+
+
+>> Docker is containerization Platform for Developing,Packaging,Shipping & Running your application
+>> Run Application in Isolated enviornment 
+>> Faster Deployment | Helps to solve Compatibility issues 
+
+>> SEG >> CODE >> PACKAGE INTO SINGLE FILE >> DOCKERFILE >> DOCKER IMAGE >> DOCKER CONTAINER
+>> Running Docker Image is called as Docker Container 
+
+>> Docker Container is a way to Package Application with all dependency & Configuration 
+>> It can be easily shared
+>> Makes Deployment & Deployment Efficient 
+>> We can run multople containers on single machines as they are isolated 
+
+>> Docker is usefull in condition when we want to test different applications with different dependency e.g Node 14 | 16 | python 2 | python 3 at Same time
+>> Docker containers are light weight & fast as compared to VM as VM need whole OS, as container encapsulate apps instead of whole machine
+
+
+Simple text file with instructions
+to bild docker images
+_________________                                         
+|                |                                       
+|  Docker File   |  -->>>  Docker Image ( Single File with All Dependency | Lib to Run )  ------------>>> ----> Container 1 | Container 2 | Container 3  ( Running Instance Of Docker Images )
+|________________| 
+
+
+
+██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗     ██╗  ██╗██╗   ██╗██████╗ 
+██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ██║  ██║██║   ██║██╔══██╗
+██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝    ███████║██║   ██║██████╔╝
+██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗    ██╔══██║██║   ██║██╔══██╗
+██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║    ██║  ██║╚██████╔╝██████╔╝
+╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
+                                                                              
+
+>> Docker Hub is like private or public registery for storing all docker images at one place, anyone can use and store docker images 
+>> Inside Docker Hub we can see we have multiple repositery for every images
+
+
+  _   _  ___  ____  _____       _ ____  
+ | \ | |/ _ \|  _ \| ____|     | / ___| 
+ |  \| | | | | | | |  _|    _  | \___ \ 
+ | |\  | |_| | |_| | |___  | |_| |___) |
+ |_| \_|\___/|____/|_____|  \___/|____/ 
+                                        
+
+>> apt-get install nodejs | apt-get install npm
+>> git clone https://github.com/Adedoyin-Emmanuel/react-weather-app.git
+>> cd react-weather-app >> npm install >> npm run start
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# ls -lrt
+total 756
+-rw-r--r--   1 root root    906 May 13 13:18 README.md
+-rw-r--r--   1 root root   1494 May 13 13:18 Jenkinsfile
+-rw-r--r--   1 root root    124 May 13 13:18 Dockerfile
+-rw-r--r--   1 root root   1141 May 13 13:18 package.json
+drwxr-xr-x   2 root root   4096 May 13 13:18 scripts
+drwxr-xr-x   2 root root   4096 May 13 13:18 public
+drwxr-xr-x   9 root root   4096 May 13 13:18 src
+-rw-r--r--   1 root root 703244 May 13 13:23 package-lock.json
+drwxr-xr-x 890 root root  36864 May 13 13:24 node_modules
+
+
+██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗ ███████╗██╗██╗     ███████╗
+██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗██╔════╝██║██║     ██╔════╝
+██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝█████╗  ██║██║     █████╗  
+██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗██╔══╝  ██║██║     ██╔══╝  
+██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║██║     ██║███████╗███████╗
+╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝
+                                                                            
+FROM  node:18-alpine
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["npm","run","start"]
+
+>> docker build -t myapp .
+>> docker image prune -a : To deletel all unused images
+
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker build -t myapp .
+
+Sending build context to Docker daemon  4.475MB
+Step 1/6 : FROM  node:18-alpine
+18-alpine: Pulling from library/node
+4abcf2066143: Pull complete
+45a0166cf96b: Pull complete
+832e0dc1fe41: Pull complete
+8ae971f79f99: Pull complete
+Digest: sha256:4837c2ac8998cf172f5892fb45f229c328e4824c43c8506f8ba9c7996d702430
+Status: Downloaded newer image for node:18-alpine
+ ---> 1835bef2bac8
+Step 2/6 : WORKDIR /app
+ ---> Running in a12a2b7e2656
+Removing intermediate container a12a2b7e2656
+ ---> 86c53802463f
+Step 3/6 : COPY package.json package-lock.json ./
+ ---> 0e64b276ea4c
+Step 4/6 : COPY . .
+ ---> 22b66bf6966a
+Step 5/6 : RUN npm install
+ ---> Running in b421dfea7ca5
+
+>> docker images | docker image ls
+>> docker run -d --rm -p 3000:3000 myapp  ( You can access application by port 3000 ) -d : Detached Mode | --rm : to remove docker container after stop } --p : Define Port Mapping (system:container)
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker images
+REPOSITORY   TAG         IMAGE ID       CREATED         SIZE
+myapp        latest      810f92a6285f   9 minutes ago   488MB
+node         18-alpine   1835bef2bac8   2 weeks ago     127MB
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+004126d88529   myapp     "docker-entrypoint.s…"   6 minutes ago   Up 6 minutes   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   vigilant_maxwell
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker container ls
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+004126d88529   myapp     "docker-entrypoint.s…"   6 minutes ago   Up 6 minutes   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   vigilant_maxwell
+
+
+
+
