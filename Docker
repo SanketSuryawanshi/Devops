@@ -290,3 +290,70 @@ root@ip-172-31-26-211:/home/ubuntu/python-progrmme# docker volume inspect myvolu
 
 .dockerignore file >> To ignore files from Docker images while Building 
 >> Dockerfile | .git
+
+
+
+██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗     ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
+██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
+██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝    ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
+██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗    ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗ 
+██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║    ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗
+╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+                                                                                                                   
+
+>> SQL DATABASE LOCAL ( localhost ) <<<----->>> Python Container as It's isolated how they can communicate ?
+>> replace localhost by host.docker.internal
+
+>> Default Network
+>> Host Network
+>> Bridge Network
+
+root@ip-172-31-26-211:/home/ubuntu/python-progrmme# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+da8ba1055d79   bridge    bridge    local
+3538f1c5bc1f   host      host      local
+a9438b1b2c5e   none      null      local
+
+
+>> Two Containers << SQL-DB Container >>  <<--------->> <<Python Container >> How they can communicate ?
+>> docker run -d --rm --name "mysql_db" --env MYSQL_DATABASE="sample" --env MYSQL_ROOT_PASSWORD="root" mysql
+
+
+
+██████╗  ██████╗  ██████╗██╗  ██╗███████╗██████╗      ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███████╗███████╗
+██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔═══██╗██╔════╝██╔════╝
+██║  ██║██║   ██║██║     █████╔╝ █████╗  ██████╔╝    ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║███████╗█████╗  
+██║  ██║██║   ██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗    ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║╚════██║██╔══╝  
+██████╔╝╚██████╔╝╚██████╗██║  ██╗███████╗██║  ██║    ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝███████║███████╗
+╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝ ╚══════╝╚══════╝
+                                                                                                                  
+
+services:
+  mysqldb:
+    image: 'mysql:latest'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=userinfo
+    container_name: "mysqldb"
+    networks:
+      - my-network
+    healthcheck:
+      test: ['CMD','mysqladmin','ping','-h','localhost']
+      timeout: 20s
+      retries: 10
+
+  mypythonapp:
+    build: ./
+    container_name: mypyapp
+    networks:
+      - my-network
+    volumes:
+      - ./servers.txt:/myapp/servers.txt
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+
+networks:
+  my-network:
