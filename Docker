@@ -126,6 +126,89 @@ root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker container ls
 CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                       NAMES
 004126d88529   myapp     "docker-entrypoint.s…"   6 minutes ago   Up 6 minutes   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   vigilant_maxwell
 
+>> docker stop <container-id>
+>> docker rm <container-id>
+>> docker kill <container-id>
+>> docker rmi <image-name>
+>> docker image prune -a
 
 
 
+  ____  ____  _____      ____  _____ _____ ___ _   _ _____ ____    ___ __  __    _    ____ _____ ____  
+ |  _ \|  _ \| ____|    |  _ \| ____|  ___|_ _| \ | | ____|  _ \  |_ _|  \/  |  / \  / ___| ____/ ___| 
+ | |_) | |_) |  _| _____| | | |  _| | |_   | ||  \| |  _| | | | |  | || |\/| | / _ \| |  _|  _| \___ \ 
+ |  __/|  _ <| |__|_____| |_| | |___|  _|  | || |\  | |___| |_| |  | || |  | |/ ___ \ |_| | |___ ___) |
+ |_|   |_| \_\_____|    |____/|_____|_|   |___|_| \_|_____|____/  |___|_|  |_/_/   \_\____|_____|____/ 
+                                                                                                       
+
+>> Multiple Predefined Images already present on docker registery
+>> docker pull <image-name>
+
+>> docker pull tomcat
+>> docker run -d --it -p 8080:8080 tomcat
+>> docker exec -it <container-id> /bin/bash
+
+
+root@0e08dbe06a6a:/usr/local/tomcat# ls -lrt
+total 160
+drwxr-xr-x 7 root root  4096 Apr 16 12:17 webapps.dist
+-rw-r--r-- 1 root root 16076 Apr 16 12:17 RUNNING.txt
+-rw-r--r-- 1 root root  6776 Apr 16 12:17 RELEASE-NOTES
+-rw-r--r-- 1 root root  3298 Apr 16 12:17 README.md
+-rw-r--r-- 1 root root  2333 Apr 16 12:17 NOTICE
+-rw-r--r-- 1 root root 60393 Apr 16 12:17 LICENSE
+-rw-r--r-- 1 root root  6210 Apr 16 12:17 CONTRIBUTING.md
+-rw-r--r-- 1 root root 21043 Apr 16 12:17 BUILDING.txt
+drwxrwxrwt 2 root root  4096 May  2 06:54 temp
+drwxr-xr-x 2 root root  4096 May  2 06:54 lib
+drwxr-xr-x 2 root root  4096 May  2 06:54 native-jni-lib
+drwxr-xr-x 2 root root  4096 May  2 06:54 bin
+drwxr-xr-x 1 root root  4096 May 13 14:20 conf
+drwxrwxrwt 1 root root  4096 May 13 14:20 logs
+drwxr-xr-x 1 root root  4096 May 13 14:24 webapps
+drwxrwxrwt 1 root root  4096 May 13 14:24 work
+
+root@0e08dbe06a6a:/usr/local/tomcat# cd webapps
+
+>> wget https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+
+root@0e08dbe06a6a:/usr/local/tomcat/webapps# ls -lrt
+total 12
+-rw-r--r-- 1 root root 4606 Mar 31  2012 sample.war
+drwxr-x--- 5 root root 4096 May 13 14:25 sample
+
+root@0e08dbe06a6a:/usr/local/tomcat/webapps# cd sample
+
+root@0e08dbe06a6a:/usr/local/tomcat/webapps/sample# ls -lrt
+total 20
+-rw-r----- 1 root root  376 Jul 30  2007 hello.jsp
+drwxr-x--- 4 root root 4096 May 13 14:24 WEB-INF
+drwxr-x--- 2 root root 4096 May 13 14:24 images
+drwxr-x--- 2 root root 4096 May 13 14:24 META-INF
+-rw-r----- 1 root root  679 May 13 14:25 index.html
+root@0e08dbe06a6a:/usr/local/tomcat/webapps/sample#
+
+
+
+>> docker login : suryawanshisanket69@gmail.com vR@W&G*$,GZTf8?
+>> docker push suryawanshisanket/myapp:latest
+
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker images
+REPOSITORY                TAG         IMAGE ID       CREATED             SIZE
+myapp                     latest      810f92a6285f   About an hour ago   488MB
+suryawanshisanket/myapp   latest      810f92a6285f   About an hour ago   488MB
+tomcat                    latest      fca42eb4b550   11 days ago         455MB
+node                      18-alpine   1835bef2bac8   2 weeks ago         127MB
+root@ip-172-31-26-211:/home/ubuntu/react-weather-app# docker push suryawanshisanket/myapp:latest
+The push refers to repository [docker.io/suryawanshisanket/myapp]
+e74165181365: Pushing [===========>                                       ]  79.22MB/355.2MB
+0b1a503203e5: Pushed
+68e83dcc07d3: Pushed
+ac55bed0f2c2: Pushed
+3fecce352908: Pushed
+1da03ac21ec8: Pushed
+926b35a05f1d: Pushed
+d4fc045c9e3a: Pushed
+
+
+>> docker tag <old-image-name>:<tag> suryawanshisanket/<new-image-name>:<tag>
