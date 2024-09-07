@@ -25,6 +25,12 @@ location /api {
        proxy_pass http://127.0.0.1:8000/api;
 }
 
+sudo add-apt-repository universe
+sudo apt update
+apt-cache search tomcat
+sudo apt install tomcat10
+
+
 # Install tomcat 9 
 apt-get install tomcat9
 
