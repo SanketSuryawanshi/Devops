@@ -1,0 +1,17 @@
+   60  docker docker volume prune
+   61  docker volume prune
+   62  docker volume create my_sqldata
+   63  docker run -d --name mysql_container -e MYSQL_ROOT_PASSWORD=my-secret-pw -v my_sqldata:/var/lib/mysql mysql
+   64  docker exec -it mysql-container mysql -uroot -p
+   65  docker exec -it mysql_container mysql -uroot -p
+   66  docker ps
+   67  docker stop d6d59a359ce3
+   68  docker continer prune
+   69  docker container prune
+   70  docker ps
+   71  docker ps -a
+   72  docker volume ls
+   73  docker run -d   --name mysql-container-new -e MYSQL_ROOT_PASSWORD=my-secret-pw -v my_sqldata:/var/lib/mysql   mysql:latest
+   74  docker ps
+   75  docker exec -it 960a31795891 /bin/bash
+   76  history
