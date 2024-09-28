@@ -1,0 +1,124 @@
+Here’s a concise list of common **Docker** and **Git** commands with brief explanations:
+
+---
+
+### **Docker Commands:**
+
+1. **docker pull <image>**  
+   Pull an image from a repository (e.g., DockerHub).
+   
+2. **docker build -t <name> <path>**  
+   Build an image from a Dockerfile.
+   
+3. **docker run <image>**  
+   Run a container from an image.
+   
+4. **docker run -d <image>**  
+   Run a container in detached mode (background).
+   
+5. **docker ps**  
+   List running containers.
+   
+6. **docker ps -a**  
+   List all containers (running or stopped).
+   
+7. **docker stop <container-id>**  
+   Stop a running container.
+   
+8. **docker start <container-id>**  
+   Start a stopped container.
+   
+9. **docker rm <container-id>**  
+   Remove a stopped container.
+   
+10. **docker rmi <image-id>**  
+    Remove an image.
+    
+11. **docker logs <container-id>**  
+    Show logs of a running/stopped container.
+    
+12. **docker exec -it <container-id> /bin/bash**  
+    Open an interactive shell inside a running container.
+    
+13. **docker-compose up**  
+    Start services defined in `docker-compose.yml`.
+    
+14. **docker-compose down**  
+    Stop and remove containers and networks defined by Docker Compose.
+
+15. **docker network ls**  
+    List available Docker networks.
+
+16. **docker volume ls**  
+    List Docker volumes.
+
+17. **docker inspect <container-id>**  
+    Show detailed info about a container.
+
+---
+
+### **Git Commands:**
+
+1. **git init**  
+   Initialize a new Git repository.
+   
+2. **git clone <repo-url>**  
+   Clone a remote repository locally.
+   
+3. **git status**  
+   Show the status of changes in the working directory.
+   
+4. **git add <file>**  
+   Stage changes for commit.
+   
+5. **git commit -m "message"**  
+   Commit staged changes with a message.
+   
+6. **git push**  
+   Push local commits to the remote repository.
+   
+7. **git pull**  
+   Fetch and merge changes from the remote repository.
+   
+8. **git branch**  
+   List local branches.
+   
+9. **git checkout <branch-name>**  
+   Switch to another branch.
+   
+10. **git checkout -b <new-branch>**  
+    Create and switch to a new branch.
+    
+11. **git merge <branch-name>**  
+    Merge another branch into the current branch.
+    
+12. **git fetch**  
+    Fetch changes from the remote (without merging).
+    
+13. **git log --oneline**  
+    Show a compact log of commits.
+    
+14. **git reset --hard <commit-id>**  
+    Reset to a specific commit, discarding changes.
+    
+15. **git rebase <branch-name>**  
+    Reapply commits from one branch on top of another.
+    
+16. **git stash**  
+    Temporarily save changes that aren't ready for commit.
+    
+17. **git stash pop**  
+    Reapply stashed changes.
+    
+18. **git remote -v**  
+    Show the remote repository URL(s).
+    
+19. **git diff**  
+    Show changes between commits or the working directory and the last commit.
+    
+20. **git tag <tag-name>**  
+    Create a tag for a specific commit.
+
+---
+
+This gives you a broad overview of essential Docker and Git commands. Let me know if you need more details or examples for any command!
