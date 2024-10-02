@@ -11,3 +11,17 @@ exit 0  # EXIT CODE
 >> The Shebang line : #!/bin/bash
 >> Any Bash Commands
 >> Exit Code Status (0 SUCCESFULL, 1-255 UNSUCESSFUL)
+
+>> To create new user sanket to add it to sudo list:   
+- useradd -m sanket
+- usermod -aG sudo sanket ( To get root access )
+- su sanket
+- useradd -u 1500 jane
+
+>> cat /etc/passed ( To get list of all users )
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+sanket:x:1001:1001::/home/sanket:/bin/sh
+kishor:x:1002:1002::/home/kishor:/bin/sh
+
+>> chmod : To Change Permission : Secure Code 744 : Owner | Group | Other Permission  
+>> 4 : Read | 2 : Write | 1 : Execute 
