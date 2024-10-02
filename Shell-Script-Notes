@@ -1,0 +1,13 @@
+- A Shell is programme that interprets commands you type in our terminal and passes thems on Operating System
+- Bash is most popular and common shell
+- #!/bin/bash > Shebang Line
+- Script is basically file containing commands of line
+
+#!/bin/bash
+echo "This is my first script"
+exit 0  # EXIT CODE 
+
+- Bash Script has 3 Components
+>> The Shebang line : #!/bin/bash
+>> Any Bash Commands
+>> Exit Code Status (0 SUCCESFULL, 1-255 UNSUCESSFUL)
