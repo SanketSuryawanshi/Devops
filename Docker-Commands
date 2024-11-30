@@ -1,0 +1,26 @@
+git remote set-url origin https://SanketSuryawanshi:<token>@github.com/SanketSuryawanshi/Devops.git 
+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
+
+root@ip-172-31-91-253:~/Devops# systemctl status docker
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2024-11-30 13:52:56 UTC; 1h 25min ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 2614 (dockerd)
+      Tasks: 12
+     Memory: 72.8M (peak: 321.0M)
+        CPU: 5.781s
+     CGroup: /system.slice/docker.service
+             └─2614 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+Nov 30 13:52:55 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:55.778462611Z" level=info msg="Loading containers: start."
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.112086086Z" level=info msg="Loading containers: done."
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.146507317Z" level=warning msg="WARNING: bridge-nf-call-iptables is disabled"
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.146527515Z" level=warning msg="WARNING: bridge-nf-call-ip6tables is disabled"
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.146544385Z" level=info msg="Docker daemon" commit=41ca978 containerd-snapsho>
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.146613512Z" level=info msg="Daemon has completed initialization"
+Nov 30 13:52:56 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T13:52:56.210318609Z" level=info msg="API listen on /run/docker.sock"
+Nov 30 13:52:56 ip-172-31-91-253 systemd[1]: Started docker.service - Docker Application Container Engine.
+Nov 30 14:39:25 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T14:39:25.985277664Z" level=info msg="ignoring event" container=873b80445ead225bd10911>
+Nov 30 14:39:27 ip-172-31-91-253 dockerd[2614]: time="2024-11-30T14:39:27.648182081Z" level=info msg="ignoring event" container=812fd1d50596db5f6e1e3b>
