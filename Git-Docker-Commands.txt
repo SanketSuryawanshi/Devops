@@ -55,6 +55,41 @@ Here’s a concise list of common **Docker** and **Git** commands with brief exp
 17. **docker inspect <container-id>**  
     Show detailed info about a container.
 
+18. Remove all images: docker rmi $(docker images -q)
+
+19. Stop and remove all containers: docker stop $(docker ps -q) | docker rm $(docker ps -aq)
+
+20. Clean up unused resources: docker system prune -a --volumes
+
+https://github.com/LondheShubham153/simple-java-docker.git
+
+DOCKERFILE : CONTAINS INSTRUCTION TO BUILD DOCKER IMAGE > Run Docker Image to get > Docker Container
+
+root@ip-172-31-91-253:~/Projects/simple-java-docker# cat Dockerfile
+# stable official Java runtime base image
+FROM openjdk:17-jdk-alpine
+
+# metadata
+LABEL maintainer="your-email@example.com"
+LABEL version="1.0"
+LABEL description="A simple Java application"
+
+# working directory
+WORKDIR /app
+
+# Copy source code into the container
+COPY src/Main.java /app/Main.java
+
+# Compile the Java code
+RUN javac Main.java
+
+# Run the Java application when the container starts
+CMD ["java", "Main"]
+
+CMD and ENTRYPOINT are like injection to continaer as Command
+
+https://github.com/LondheShubham153/flask-app-ecs
+
 ---
 
 ### **Git Commands:**
