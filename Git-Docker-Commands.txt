@@ -93,6 +93,32 @@ https://github.com/LondheShubham153/flask-app-ecs
 docker attach <container-id>
 docker logs <container-id>
 
+## Docker Network
+
+1. Host N/W
+2. Bridge N/W ( Default )
+3. User Define Bridge ( Custome ) N/W
+4. None N/W
+5. Macvlan N/W
+6. IPvlan N/W
+7. Overlay N/W
+
+root@ip-172-31-91-253:~/Projects/flask-app-ecs# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+3736edf90e09   bridge    bridge    local
+79da0acb73fa   host      host      local
+f57300e0adb9   none      null      local
+
+root@ip-172-31-91-253:~/Projects/flask-app-ecs# docker network create mynetwork -d bridge
+f2f9b8c70ed89a313c1d3f6d83de8ef620f7f073958d9df3ea7593076a8038c1
+root@ip-172-31-91-253:~/Projects/flask-app-ecs# docker network ls
+NETWORK ID     NAME        DRIVER    SCOPE
+3736edf90e09   bridge      bridge    local
+79da0acb73fa   host        host      local
+f2f9b8c70ed8   mynetwork   bridge    local
+f57300e0adb9   none        null      local
+
+
 ---
 
 ### **Git Commands:**
