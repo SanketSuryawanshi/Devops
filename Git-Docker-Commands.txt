@@ -90,6 +90,9 @@ CMD and ENTRYPOINT are like injection to continaer as Command
 
 https://github.com/LondheShubham153/flask-app-ecs
 
+docker attach <container-id>
+docker logs <container-id>
+
 ---
 
 ### **Git Commands:**
