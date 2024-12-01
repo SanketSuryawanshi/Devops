@@ -118,6 +118,200 @@ NETWORK ID     NAME        DRIVER    SCOPE
 f2f9b8c70ed8   mynetwork   bridge    local
 f57300e0adb9   none        null      local
 
+DOCKER NETWORKING PROJECT
+
+https://github.com/LondheShubham153/two-tier-flask-app
+$ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+
+root@ip-172-31-91-253:~/Projects# docker pull mysql
+Using default tag: latest
+latest: Pulling from library/mysql
+2c0a233485c3: Pull complete
+cb5a6a8519b2: Pull complete
+570d30cf82c5: Pull complete
+a841bff36f3c: Pull complete
+80ba30c57782: Pull complete
+5e49e1f26961: Pull complete
+ced670fc7f1c: Pull complete
+0b9dc7ad7f03: Pull complete
+cd0d5df9937b: Pull complete
+1f87d67b89c6: Pull complete
+Digest: sha256:0255b469f0135a0236d672d60e3154ae2f4538b146744966d96440318cc822c6
+Status: Downloaded newer image for mysql:latest
+docker.io/library/mysql:latest
+root@ip-172-31-91-253:~/Projects# docker images
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+flask-app    latest    356c40361627   12 hours ago   1.01GB
+mysql        latest    56a8c14e1404   6 weeks ago    603MB
+root@ip-172-31-91-253:~/Projects# docker run --name mysqldb -e MYSQL_ROOT_PASSWORD=root -d mysql
+e9ae9192d40a6a7821d933cc32a7d466cfbab85285d7557f263cf5815cf7672b
+root@ip-172-31-91-253:~/Projects# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                 NAMES
+e9ae9192d40a   mysql     "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   3306/tcp, 33060/tcp   mysqldb
+root@ip-172-31-91-253:~/Projects# docker exec -it e9ae9192d40a bash
+bash-5.1# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 9.1.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.01 sec)
+
+mysql>
+bash-5.1# mysql --version
+mysql  Ver 9.1.0 for Linux on x86_64 (MySQL Community Server - GPL)
+
+### DOCKER FILE FOR FLASK APP ###
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# cat Dockerfile
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# install required packages for system
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y gcc default-libmysqlclient-dev pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install app dependencies
+RUN pip install mysqlclient
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY . .
+
+# Specify the command to run your application
+CMD ["python", "app.py"]
+
+>>> Create Docker Image from Docker File:
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker build -t two-tier-backend .
+[+] Building 54.5s (12/12) FINISHED                                                                                                              docker:default
+ => [internal] load build definition from Dockerfile                                                                                                       0.1s
+ => => transferring dockerfile: 667B                                                                                                                       0.0s
+ => [internal] load metadata for docker.io/library/python:3.9-slim                                                                                         0.5s
+ => [internal] load .dockerignore                                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                                            0.0s
+ => [1/7] FROM docker.io/library/python:3.9-slim@sha256:6250eb7983c08b3cf5a7db9309f8630d3ca03dd152158fa37a3f8daaf397085d                                   3.6s
+ => => resolve docker.io/library/python:3.9-slim@sha256:6250eb7983c08b3cf5a7db9309f8630d3ca03dd152158fa37a3f8daaf397085d                                   0.1s
+ => => sha256:6250eb7983c08b3cf5a7db9309f8630d3ca03dd152158fa37a3f8daaf397085d 10.41kB / 10.41kB                                                           0.0s
+ => => sha256:43e98aa4594b2a62ace026fb04338453f799bd6012b7933ecd442d6876787cb5 1.75kB / 1.75kB                                                             0.0s
+ => => sha256:6a22698eab0ea915af39918e5d2e4f27e49afc6944fd1d97466e13820324bc62 5.41kB / 5.41kB                                                             0.0s
+ => => sha256:2d429b9e73a6cf90a5bb85105c8118b30a1b2deedeae3ea9587055ffcb80eb45 29.13MB / 29.13MB                                                           0.5s
+ => => sha256:4920a3bd5f7ed3269b647eb643846a0652dc21daa31763b4afc848701981d141 3.51MB / 3.51MB                                                             0.2s
+ => => sha256:77edb37367fad6d17c53a3cabdf41a57c0221a49f77250d97e3f5bb1fc1ed6e0 14.93MB / 14.93MB                                                           0.4s
+ => => sha256:02c34c079cc82f150c24eae4d136fd997632cd64c1f922aa8c5974be33792ae5 255B / 255B                                                                 0.3s
+ => => extracting sha256:2d429b9e73a6cf90a5bb85105c8118b30a1b2deedeae3ea9587055ffcb80eb45                                                                  1.5s
+ => => extracting sha256:4920a3bd5f7ed3269b647eb643846a0652dc21daa31763b4afc848701981d141                                                                  0.2s
+ => => extracting sha256:77edb37367fad6d17c53a3cabdf41a57c0221a49f77250d97e3f5bb1fc1ed6e0                                                                  0.8s
+ => => extracting sha256:02c34c079cc82f150c24eae4d136fd997632cd64c1f922aa8c5974be33792ae5                                                                  0.0s
+ => [internal] load build context                                                                                                                          0.1s
+ => => transferring context: 167.98kB                                                                                                                      0.0s
+ => [2/7] WORKDIR /app                                                                                                                                     0.1s
+ => [3/7] RUN apt-get update     && apt-get upgrade -y     && apt-get install -y gcc default-libmysqlclient-dev pkg-config     && rm -rf /var/lib/apt/li  28.7s
+ => [4/7] COPY requirements.txt .                                                                                                                          0.1s
+ => [5/7] RUN pip install mysqlclient                                                                                                                      9.4s
+ => [6/7] RUN pip install --no-cache-dir -r requirements.txt                                                                                               5.6s
+ => [7/7] COPY . .                                                                                                                                         0.3s
+ => exporting to image                                                                                                                                     5.7s
+ => => exporting layers                                                                                                                                    5.7s
+ => => writing image sha256:1cdc6eec685eb9dae1a205255c9bea5342be59195876aa184d4830aa045bfd60                                                               0.0s
+ => => naming to docker.io/library/two-tier-backend                                                                                                        0.0s
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
+>> Run two tier backend Image
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker run --name backend-app -d -p 5000:5000 -e MYSQL_HOST=mysqldb -e MYSQL_USER=root -e MYSQL_PASSWORD=root -e MYSQL_DB=devops two-tier-backend
+
+docker network create two-tier-nw -d bridge
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker network ls
+NETWORK ID     NAME          DRIVER    SCOPE
+20caa7cafcee   bridge        bridge    local
+79da0acb73fa   host          host      local
+f2f9b8c70ed8   mynetwork     bridge    local
+f57300e0adb9   none          null      local
+d679343d7630   two-tier-nw   bridge    local
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker ps
+CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+053425bbf665   two-tier-backend   "python app.py"          2 minutes ago   Up 2 minutes   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   flask-backend-app
+df047443b4ca   mysql              "docker-entrypoint.s…"   3 minutes ago   Up 3 minutes   3306/tcp, 33060/tcp                         mysqldb
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker network inspect two-tier-nw
+[
+    {
+        "Name": "two-tier-nw",
+        "Id": "d679343d7630d728855f74a8b04bbb48dce622d807cd5f26aebe9a2c94f1f5f0",
+        "Created": "2024-12-01T06:28:02.193120541Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "053425bbf665f506446e271a11ad9da80f6536bd8d38d586390015c86a0ca87e": {
+                "Name": "flask-backend-app",
+                "EndpointID": "2ba67f33c007fd02a33c4c855396aca3a6bc3c06a07080a0a75c97de6e9997af",
+                "MacAddress": "02:42:ac:13:00:03",
+                "IPv4Address": "172.19.0.3/16",
+                "IPv6Address": ""
+            },
+            "df047443b4ca8b8a93eb22a0e16aedec56a0a64979fc27371a5a99cc7eb0ea86": {
+                "Name": "mysqldb",
+                "EndpointID": "577e7353debd9a2d19f5db9dc19ce680a3e70e3e9ffbf46e154c8f532b13fcbe",
+                "MacAddress": "02:42:ac:13:00:02",
+                "IPv4Address": "172.19.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
+
 
 ---
 
