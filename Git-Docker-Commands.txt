@@ -672,6 +672,9 @@ latest: digest: sha256:fabcf7d0daa70f241c9decb4167e038aab242cefc3a0443d03b794a7b
 root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
 
 
+>> docker containers logs and monitoring
+nohup docker attach <container-id> &
+
 ---
 
 ### **Git Commands:**
