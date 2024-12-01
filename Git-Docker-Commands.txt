@@ -311,6 +311,102 @@ root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker network inspect two-
 ]
 root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
 
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker ps
+CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+053425bbf665   two-tier-backend   "python app.py"          6 minutes ago   Up 6 minutes   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   flask-backend-app
+df047443b4ca   mysql              "docker-entrypoint.s…"   7 minutes ago   Up 7 minutes   3306/tcp, 33060/tcp                         mysqldb
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker exec -it df047443b4ca bash
+bash-5.1# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 9.1.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| devops             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.18 sec)
+
+mysql> use devops;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_devops |
++------------------+
+| messages         |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from messages
+    -> ;
++----+---------------------------+
+| id | message                   |
++----+---------------------------+
+|  1 | Hello Sirji Sanket Here!! |
+|  2 | I am good Learning Docker |
++----+---------------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+
+##################################################### DOCKER VOLUME ###############################
+
+>> Docker volumes and Storage for data peristence:
+
+>> If we restart docker container data will be there but in terms of remvoal of containers data will be erased
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker volume ls
+DRIVER    VOLUME NAME
+local     024250d4f1d3d2b8152e5394e5f43f287613a5d9270b8c07ea604f19e963fc03
+local     25682ed655a83a8964f4b26ba8318460ff44b90155ba3ea753cf8e1f1117f31e
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker volume ls
+DRIVER    VOLUME NAME
+local     024250d4f1d3d2b8152e5394e5f43f287613a5d9270b8c07ea604f19e963fc03
+local     25682ed655a83a8964f4b26ba8318460ff44b90155ba3ea753cf8e1f1117f31e
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker volume create mysql-data
+mysql-data
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker volume ls
+DRIVER    VOLUME NAME
+local     024250d4f1d3d2b8152e5394e5f43f287613a5d9270b8c07ea604f19e963fc03
+local     25682ed655a83a8964f4b26ba8318460ff44b90155ba3ea753cf8e1f1117f31e
+local     mysql-data
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker volume inspect mysql-data
+[
+    {
+        "CreatedAt": "2024-12-01T06:52:31Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/mysql-data/_data",
+        "Name": "mysql-data",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+>> Volume Binding
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker run --name mysqldb -d --network two-tier-nw -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=devops mysql
 
 
 ---
