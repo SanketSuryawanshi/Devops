@@ -647,6 +647,30 @@ networks:
   twotier:
 root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
 
+#################################################  DOCKER REGISTERY #########################
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker image tag two-tier-backend:latest suryawanshisanket/two-tier-backend:latest
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker images
+REPOSITORY                           TAG       IMAGE ID       CREATED        SIZE
+two-tier-backend                     latest    1cdc6eec685e   2 hours ago    392MB
+suryawanshisanket/two-tier-backend   latest    1cdc6eec685e   2 hours ago    392MB
+flask-app                            latest    356c40361627   14 hours ago   1.01GB
+mysql                                latest    56a8c14e1404   6 weeks ago    603MB
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker push suryawanshisanket/two-tier-backend:latest
+The push refers to repository [docker.io/suryawanshisanket/two-tier-backend]
+d6365ff7592b: Pushed
+f11ed3809ec5: Pushed
+2d291706f084: Pushed
+dc4dbcc030b6: Pushed
+9ff3f36269ac: Pushed
+ca96a3b510c3: Pushed
+aacba17e24d9: Pushed
+f751ad7c65c4: Pushed
+7822e749b484: Pushed
+c3548211b826: Pushed
+latest: digest: sha256:fabcf7d0daa70f241c9decb4167e038aab242cefc3a0443d03b794a7bdb0feae size: 2416
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
 
 ---
 
