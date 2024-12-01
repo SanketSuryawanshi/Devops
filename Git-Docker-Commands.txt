@@ -411,6 +411,214 @@ root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker run --name mysqldb -
 >> NAMED VOLUMES AND PATH BASED VOLUMES
 root@ip-172-31-91-253:~/Projects/two-tier-flask-app# docker run --name mysqldb -d --network two-tier-nw -v /home/ubuntu/mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=devops mysql
 
+
+####################################### DOCKER COMPOSE ###############################
+
+Here's a concise Docker Compose cheatsheet to help you quickly refer to common commands and concepts:
+
+## **Docker Compose Commands**
+
+### **Basic Commands**
+- **Start services:**
+  ```bash
+  docker-compose up
+  ```
+  - Add `-d` to run in detached mode.
+  ```bash
+  docker-compose up -d
+  ```
+
+- **Stop services:**
+  ```bash
+  docker-compose down
+  ```
+  - Add `--volumes` to remove volumes:
+  ```bash
+  docker-compose down --volumes
+  ```
+
+- **Rebuild images and restart services:**
+  ```bash
+  docker-compose up --build
+  ```
+
+### **Service Management**
+- **List all running services:**
+  ```bash
+  docker-compose ps
+  ```
+
+- **Restart a service:**
+  ```bash
+  docker-compose restart <service_name>
+  ```
+
+- **Stop a service:**
+  ```bash
+  docker-compose stop <service_name>
+  ```
+
+- **Start a stopped service:**
+  ```bash
+  docker-compose start <service_name>
+  ```
+
+- **Remove stopped containers:**
+  ```bash
+  docker-compose rm
+  ```
+
+### **Logs and Debugging**
+- **View logs for all services:**
+  ```bash
+  docker-compose logs
+  ```
+  - View logs for a specific service:
+  ```bash
+  docker-compose logs <service_name>
+  ```
+
+- **Follow logs (live view):**
+  ```bash
+  docker-compose logs -f
+  ```
+
+### **Execute Commands**
+- **Run a command in a service container:**
+  ```bash
+  docker-compose exec <service_name> <command>
+  ```
+  Example:
+  ```bash
+  docker-compose exec web bash
+  ```
+
+- **Run a one-off command in a new container:**
+  ```bash
+  docker-compose run <service_name> <command>
+  ```
+  Example:
+  ```bash
+  docker-compose run web python manage.py migrate
+  ```
+
+### **Scaling Services**
+- **Scale a service:**
+  ```bash
+  docker-compose up -d --scale <service_name>=<number>
+  ```
+  Example:
+  ```bash
+  docker-compose up -d --scale web=3
+  ```
+
+---
+
+## **Docker Compose File Syntax**
+### **Version Declaration**
+```yaml
+version: "3.9"  # Specify the Compose file version
+```
+
+### **Define Services**
+```yaml
+services:
+  app:
+    image: myapp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
+    environment:
+      - NODE_ENV=production
+```
+
+### **Networks**
+```yaml
+networks:
+  default:
+    driver: bridge
+```
+
+### **Volumes**
+```yaml
+volumes:
+  data:
+```
+
+---
+
+## **Common Tips**
+- **Override the Compose file:**
+  ```bash
+  docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+  ```
+
+- **View configuration:**
+  ```bash
+  docker-compose config
+  ```
+
+- **Validate Compose file:**
+  ```bash
+  docker-compose config --services
+  ```
+
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app# cat docker-compose.yml
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devops
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./message.sql:/docker-entrypoint-initdb.d/message.sql
+    networks:
+      - twotier
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  flask-app:
+    build:
+      context: .
+    container_name: flask-app
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DB: devops
+    depends_on:
+      - mysql
+    networks:
+      - twotier
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  twotier:
+root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
+
+
 ---
 
 ### **Git Commands:**
