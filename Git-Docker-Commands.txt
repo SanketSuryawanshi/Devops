@@ -675,6 +675,72 @@ root@ip-172-31-91-253:~/Projects/two-tier-flask-app#
 >> docker containers logs and monitoring
 nohup docker attach <container-id> &
 
+#######################################################################   DOCKER COMPOSE #########
+
+root@ip-172-31-83-78:~/django-notes-app# cat docker-compose.yml
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    container_name: "nginx"
+    ports:
+      - "80:80"
+    networks:
+      - notes-app
+    restart: always
+    depends_on:
+      - django
+
+  db:
+    image: mysql
+    container_name: "db_cont"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    networks:
+      - notes-app
+    restart: always
+
+  django:
+    build:
+      context: .
+    container_name: "django_cont"
+    ports:
+      - "8000:8000"
+    command: sh -c "python manage.py migrate --noinput && gunicorn notesapp.wsgi --bind 0.0.0.0:8000"
+    env_file:
+      - ".env"
+    networks:
+      - notes-app
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/admin || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: always
+
+networks:
+  notes-app:
+
+volumes:
+  mysql-data:
+root@ip-172-31-83-78:~/django-notes-app#
+
 ---
 
 ### **Git Commands:**
