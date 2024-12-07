@@ -95,6 +95,71 @@ ip-172-31-92-2.ec2.internal:
      07:06:02 up  1:00,  2 users,  load average: 0.00, 0.00, 0.00
 root@ip-172-31-95-203:~#
 
+################################################################################################################################################################################################
+
+If we delete key from salt-master then issue restart salt-minion and then again Accept the salt-key It will work
+
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+ip-172-31-92-2.ec2.internal
+Denied Keys:
+Unaccepted Keys:
+Rejected Keys:
+root@ip-172-31-95-203:~# salt-key -D
+The following keys are going to be deleted:
+Accepted Keys:
+ip-172-31-92-2.ec2.internal
+Proceed? [N/y] y
+Key for minion ip-172-31-92-2.ec2.internal deleted.
+
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+Denied Keys:
+Unaccepted Keys:
+Rejected Keys:
+
+root@ip-172-31-95-203:~# salt '*' cmd.run 'uptime'
+No minions matched the target. No command was sent, no jid was assigned.
+ERROR: No return received
+
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+Denied Keys:
+Unaccepted Keys:
+ip-172-31-92-2.ec2.internal
+Rejected Keys:
+
+root@ip-172-31-95-203:~# salt-key -A
+The following keys are going to be accepted:
+Unaccepted Keys:
+ip-172-31-92-2.ec2.internal
+Proceed? [n/Y] Y
+Key for minion ip-172-31-92-2.ec2.internal accepted.
+
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+ip-172-31-92-2.ec2.internal
+Denied Keys:
+Unaccepted Keys:
+Rejected Keys:
+
+root@ip-172-31-95-203:~# salt '*' cmd.run 'uptime'
+ip-172-31-92-2.ec2.internal:
+     07:22:49 up  1:17,  2 users,  load average: 0.00, 0.00, 0.00
+root@ip-172-31-95-203:~#
+
+################################################################################################################################################################################################
+
+Another case is like if we delete salt-minon keys folder: /etc/salt/pki/minion/ which containers salt-minon pem and pub key if deleted it will not match with salt-master key
+So you will need to delete key from salt-master then again regenrate key on salt-minon to accept new key by salt-master
+
+sudo rm -rf /etc/salt/pki/minion/
+sudo systemctl restart salt-minion
+
+sudo salt-run manage.status
+# Check logs >>
+sudo journalctl -u salt-master
+sudo journalctl -u salt-minion
 
 ###################################################################################################If the Salt Minion key files were deleted from the system, specifically from the `/etc/pki/tls` or `/etc/salt/pki` directory, the Minion will no longer have the necessary key pair to authenticate with the Master. Here’s how to recover from this situation:
 
