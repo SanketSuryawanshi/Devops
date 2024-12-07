@@ -1,0 +1,159 @@
+############## https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/linux-deb.html ######################
+
+# Ensure keyrings dir exists
+mkdir -p /etc/apt/keyrings
+# Download public key
+curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+# Create apt repo target configuration
+curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+
+Run sudo apt update to update metadata.
+
+sudo apt-get install salt-master
+sudo apt-get install salt-minion
+sudo apt-get install salt-ssh
+sudo apt-get install salt-syndic
+sudo apt-get install salt-cloud
+sudo apt-get install salt-api
+
+sudo systemctl enable salt-master && sudo systemctl start salt-master
+sudo systemctl enable salt-minion && sudo systemctl start salt-minion
+sudo systemctl enable salt-api && sudo systemctl start salt-api
+
+root@ip-172-31-95-203:~# salt-master --version
+salt-master 3007.1 (Chlorine)
+
+root@ip-172-31-92-2:~# salt-minion --version
+salt-minion 3007.1 (Chlorine)
+
+Open the Salt Minion configuration file:
+sudo nano /etc/salt/minion: Put Salt-master IP
+root@ip-172-31-92-2:~# sudo cat /etc/salt/minion
+##### Primary configuration settings #####
+##########################################
+# This configuration file is used to manage the behavior of the Salt Minion.
+# With the exception of the location of the Salt Master Server, values that are
+# commented out but have an empty line after the comment are defaults that need
+# not be set in the config. If there is no blank line after the comment, the
+# value is presented as an example and is not the default.
+
+# Per default the minion will automatically include all config files
+# from minion.d/*.conf (minion.d is a directory in the same directory
+# as the main minion config file).
+#default_include: minion.d/*.conf
+
+# Set the location of the salt master server. If the master server cannot be
+# resolved, then the minion will fail to start.
+master: 172.31.95.203
+
+
+Inbound Rules:
+
+Type: All ICMP - IPv4 (for ping)
+Type: Custom TCP Rule
+Port Range: 4505-4506
+Source: 172.31.80.0/20 or specific IPs of the Master and Minion.
+
+root@ip-172-31-92-2:~# telnet 172.31.95.203 4506
+Trying 172.31.95.203...
+Connected to 172.31.95.203.
+Escape character is '^]'.
+^Z^[[A^CConnection closed by foreign host.
+root@ip-172-31-92-2:~# telnet 172.31.95.203 4505
+Trying 172.31.95.203...
+Connected to 172.31.95.203.
+Escape character is '^]'.
+^C^ZConnection closed by foreign host.
+
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+Denied Keys:
+Unaccepted Keys:
+ip-172-31-92-2.ec2.internal
+Rejected Keys:
+
+# Accept all Minion keys:
+sudo salt-key -A
+Or accept a specific key:
+sudo salt-key -a <minion-id>
+
+root@ip-172-31-95-203:~# salt-key -A
+The following keys are going to be accepted:
+Unaccepted Keys:
+ip-172-31-92-2.ec2.internal
+Proceed? [n/Y] Y
+Key for minion ip-172-31-92-2.ec2.internal accepted.
+root@ip-172-31-95-203:~# salt-key -L
+Accepted Keys:
+ip-172-31-92-2.ec2.internal
+Denied Keys:
+Unaccepted Keys:
+Rejected Keys:
+
+root@ip-172-31-95-203:~# salt '*' cmd.run 'uptime'
+ip-172-31-92-2.ec2.internal:
+     07:06:02 up  1:00,  2 users,  load average: 0.00, 0.00, 0.00
+root@ip-172-31-95-203:~#
+
+
+###################################################################################################If the Salt Minion key files were deleted from the system, specifically from the `/etc/pki/tls` or `/etc/salt/pki` directory, the Minion will no longer have the necessary key pair to authenticate with the Master. Here’s how to recover from this situation:
+
+### Key File Location for Salt Minion
+Salt Minion keys are typically stored in the following location:
+```bash
+/etc/salt/pki/minion/
+```
+This directory should contain:
+- `minion.pem`: The private key for the Minion.
+- `minion.pub`: The public key for the Minion.
+
+### Scenario: Key Files Deleted
+
+If the keys were accidentally deleted and you need to reconfigure them:
+
+1. **Delete the Old Key on the Master**:
+   Since you used `salt-key -D`, the Master has already cleared all keys. Make sure this deletion is confirmed by running:
+   ```bash
+   sudo salt-key -L
+   ```
+   This should show an empty list of accepted and unaccepted keys.
+
+2. **Recreate the Key on the Minion**:
+   On the Minion (e.g., `172.31.92.2`), you need to regenerate the key. You can do this by removing the existing Minion key directory and restarting the Minion service to create new keys:
+   ```bash
+   sudo rm -rf /etc/salt/pki/minion/
+   sudo systemctl restart salt-minion
+   ```
+
+   This will cause the Minion to generate a new key pair upon startup.
+
+3. **Accept the New Minion Key on the Master**:
+   After restarting, the Minion will request authentication with the Master. On the Master, accept the new Minion key:
+   ```bash
+   sudo salt-key -L  # Confirm the Minion appears under "Unaccepted Keys"
+   sudo salt-key -a <minion-id>  # Accept the key by Minion ID
+   ```
+
+   You can also accept all unaccepted keys with:
+   ```bash
+   sudo salt-key -A
+   ```
+
+### Verification
+After accepting the new key, verify that the connection is established by running:
+```bash
+salt '*' test.ping
+```
+You should see a response like:
+```bash
+ip-172-31-92-2.ec2.internal:
+    True
+```
+
+### Best Practices
+- **Backup**: Regularly back up important configuration files, including key directories.
+- **Permissions**: Ensure the `/etc/salt/pki/minion/` directory has the correct ownership and permissions (`root:root` and `700`).
+- **Security**: Be cautious with key deletions; unauthorized deletion or exposure of keys can compromise system security.
+
+### Final Note
+If you cannot regain access by re-accepting the key or regenerating it, check if there are any network issues preventing communication between the Master and Minion (e.g., firewalls, security groups, or network ACLs).
