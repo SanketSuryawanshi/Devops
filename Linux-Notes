@@ -1,0 +1,270 @@
+Linux is a kernel. However, the term "Linux" is often used colloquially to refer to an entire operating system that is based on the Linux kernel. Here's the distinction:
+
+ 1. Linux Kernel:
+- The kernel is the core part of the operating system.
+- It manages hardware resources (CPU, memory, devices) and provides low-level services to applications.
+- Developed by Linus Torvalds in 1991.
+- Examples of what the Linux kernel does:
+  - Managing file systems.
+  - Handling process scheduling.
+  - Managing network communication.
+
+ 2. Linux-based Operating Systems (Distributions):
+- When people say "Linux," they often mean a Linux distribution (e.g., Ubuntu, Fedora, Debian).
+- A Linux distribution includes:
+  - Linux kernel.
+  - System utilities and libraries (e.g., GNU core utilities).
+  - A graphical interface (optional).
+  - Applications and package management tools.
+- These distributions form a complete operating system for end-users or servers.
+
+ Analogy:
+Think of the Linux kernel as the engine of a car. By itself, it doesn’t do much for a driver. A Linux distribution is like the entire car, with the engine, wheels, and a user interface for the driver.
+
+So technically, Linux is not an operating system; it’s the kernel upon which Linux-based operating systems are built.
+
+The history of Linux and the GNU Project is intertwined, and both are integral to the development of modern open-source operating systems. Here's a breakdown of the key historical milestones and their relationship:
+
+---
+
+ 1. GNU Project (1983)
+- Founded by: Richard Stallman.
+- Goal: To create a complete, free, and open-source Unix-like operating system.
+- Philosophy: Focused on freedom for users to run, modify, and share software.
+- Achievements:
+  - Developed many components of a Unix-like OS, such as:
+    - GNU Compiler Collection (GCC).
+    - GNU C Library (glibc).
+    - GNU Bash shell and other utilities.
+  - These tools were widely used but lacked a key component: a free kernel.
+
+The Problem: By the early 1990s, the GNU project had most of the essential parts of an OS but had not completed its kernel, Hurd. Development of Hurd was slow and not ready for production use.
+
+---
+
+ 2. Linux Kernel (1991)
+- Created by: Linus Torvalds, a Finnish computer science student.
+- Reason: Linus wanted a Unix-like OS for his personal computer (a 386 machine) but couldn't afford commercial Unix systems like MINIX.
+- Key Milestones:
+  - Linus initially wrote the Linux kernel as a hobby project, inspired by MINIX (a small Unix-like system developed for educational purposes by Andrew Tanenbaum).
+  - On August 25, 1991, Linus announced Linux on the MINIX newsgroup:
+    > "I’m doing a (free) operating system (just a hobby, won’t be big and professional like gnu)..."
+  - The kernel was initially proprietary but became open-source under the GNU General Public License (GPL) in 1992.
+
+---
+
+ 3. The Marriage of GNU and Linux
+- GNU + Linux = A Complete Operating System:
+  - The GNU tools (e.g., compilers, libraries, utilities) combined with the Linux kernel created a functional and free operating system.
+  - This combination is what people often refer to as "Linux" (though Stallman prefers the term "GNU/Linux" to acknowledge the GNU Project's contributions).
+
+---
+
+ 4. Why is Linux Called Open Source Instead of Free Software?
+- The Free Software Foundation (FSF), led by Stallman, promotes the term "free software," focusing on user freedoms.
+- In contrast, the Open Source Initiative (OSI) (founded in 1998) popularized "open source," emphasizing the practical benefits of collaboration and transparency.
+- Linus Torvalds and many contributors align more with the open-source philosophy than the stricter ideological stance of free software.
+
+---
+
+ Summary:
+- GNU Project: Provided the tools and vision for a free operating system.
+- Linux Kernel: Filled the gap left by the GNU Project’s unfinished kernel.
+- Combined Impact: Together, they created the foundations of modern Linux distributions, which power servers, desktops, and even devices like Android smartphones.
+
+
+>> Shell is a like gateway between Kernal and user, through shell we can give commands to kernal 
+
+
+
+ 1. Shell
+A shell is a program that provides a command-line interface (CLI) or a graphical interface for users to interact with the operating system.
+
+# Purpose of a Shell:
+- Acts as a bridge between the user and the operating system.
+- Translates user commands into actions the operating system can execute.
+- Allows users to:
+  - Run programs.
+  - Manage files and directories.
+  - Execute scripts.
+
+# Types of Shells:
+1. Command-Line Shells:
+   - Users type commands, and the shell interprets and executes them.
+   - Examples:
+     - Bash (Bourne Again Shell): Default in most Linux distributions.
+     - Zsh (Z Shell): Advanced shell with features like themes and plugins.
+     - Fish (Friendly Interactive Shell): Focuses on user-friendliness.
+     - C Shell (csh) and Korn Shell (ksh): Older shells.
+
+2. Graphical Shells:
+   - Provide a GUI for interacting with the OS (e.g., desktop environments like GNOME or KDE).
+
+# Shell Scripts:
+- Text files containing a sequence of commands.
+- Automate repetitive tasks by executing multiple commands sequentially.
+
+---
+
+ 2. Bootloader
+A bootloader is a low-level program responsible for starting the operating system when a computer is turned on.
+
+# Purpose of a Bootloader:
+- Initializes the system hardware.
+- Loads the operating system kernel into memory and starts it.
+- Provides a way to select which operating system or kernel version to load (in multi-boot systems).
+
+# How a Bootloader Works:
+1. BIOS/UEFI Phase:
+   - When the computer is powered on, the BIOS (or UEFI) initializes hardware and looks for a bootloader on a storage device (like a hard drive, SSD, or USB).
+
+2. Bootloader Phase:
+   - The bootloader is executed and takes control.
+   - It loads the operating system kernel into memory.
+   - Optionally displays a boot menu to let users choose an OS or kernel.
+
+3. Kernel Phase:
+   - The kernel starts and initializes the rest of the operating system.
+
+# Popular Bootloaders:
+1. GRUB (GRand Unified Bootloader):
+   - Commonly used in Linux distributions.
+   - Supports multi-boot setups and custom configurations.
+   - Allows advanced options like passing kernel parameters.
+
+2. LILO (Linux Loader):
+   - Older Linux bootloader, largely replaced by GRUB.
+
+3. SYSLINUX/ISOLINUX:
+   - Lightweight bootloaders for booting from USB or live media.
+
+4. Windows Boot Manager:
+   - Used to boot Windows operating systems.
+
+5. EFI/UEFI Boot Manager:
+   - Built into UEFI firmware for modern systems.
+
+---
+
+ Comparison Between Shell and Bootloader
+______________________________________________________________________________________________
+| Feature        |     Shell                         |     Bootloader                        |
+|----------------|-----------------------------------|---------------------------------------|
+| Purpose        | Interface between user and OS.    | Loads the OS into memory.             |
+| Role in System | Executes commands and scripts.    | Executes during system startup.       |
+| When Used      | After the OS is running.          | Before the OS starts.                 |
+| Examples       | Bash, Zsh, Fish.                  | GRUB, LILO, SYSLINUX.                 |
+______________________________________________________________________________________________
+
+---
+
+ Summary:
+- Shell: A tool for users to interact with the operating system (command line or GUI).
+- Bootloader: A program that starts the operating system when the computer boots up.
+
+
+The Linux file system organizes and manages data on storage devices. It follows a hierarchical structure, starting from a single root directory (`/`) and branching out to various subdirectories. Here's a short summary:
+
+---
+
+ Key Features of the Linux File System:
+1. Hierarchical Structure:
+   - Files are organized in a tree-like structure starting from the root directory (`/`).
+   - Everything (files, directories, devices) is represented as a file.
+
+2. Case Sensitivity:
+   - File and directory names are case-sensitive (e.g., `file.txt` and `File.txt` are different).
+
+3. File Types:
+   - Regular files: Store data (e.g., text, binary, scripts).
+   - Directories: Contain files and other directories.
+   - Special files:
+     - Character devices: Represent hardware (e.g., `/dev/tty`).
+     - Block devices: Represent storage (e.g., `/dev/sda`).
+   - Symbolic/Hard links: Point to other files.
+   - Sockets and pipes: For inter-process communication.
+
+4. Permissions:
+   - Files and directories have three levels of permissions: read (r), write (w), execute (x).
+   - Permissions are set for three entities: owner, group, and others.
+
+5. Mounting:
+   - Devices like hard drives, USB drives, and partitions are "mounted" into the file system tree to be accessed.
+
+---
+
+ Standard Directories in Linux:
+_________________________________________________________________________________________
+| Directory          | Purpose                                                          |
+|--------------------|------------------------------------------------------------------|
+| `/`                | Root directory; the starting point of the file system.           |
+| `/bin`             | Essential user binaries (e.g., `ls`, `cp`, `mkdir`).             |
+| `/sbin`            | System binaries for administration (e.g., `fdisk`, `ifconfig`).  |
+| `/etc`             | Configuration files for the system.                              |
+| `/home`            | User home directories.                                           |
+| `/var`             | Variable data like logs, caches, and spool files.                |
+| `/tmp`             | Temporary files.                                                 |
+| `/usr`             | User applications and libraries.                                 |
+| `/lib`             | Essential shared libraries for binaries in `/bin` and `/sbin`.   |
+| `/dev`             | Device files (e.g., hard disks, terminals).                      |
+| `/mnt` or `/media` | Mount points for external devices.                               |
+| `/proc`            | Virtual file system providing process and system info.           |
+| `/opt`             | Optional or third-party software packages.                       |
+_________________________________________________________________________________________
+---
+
+ Popular Linux File System Types:
+1. ext4: Default for most Linux distributions; supports large files and journaling.
+2. XFS: High-performance file system for large systems.
+3. Btrfs: Advanced features like snapshots and data compression.
+4. FAT32/NTFS: Used for compatibility with Windows.
+
+---
+
+ Summary:
+The Linux file system is a robust and flexible framework designed to manage data efficiently, with a clear structure, strict permissions, and support for various file system types. It forms the backbone of the Linux operating system's ability to manage files and directories.
+
+
+Zombie Process in Linux: A zombie process is a process that has completed its execution but still exists in the process table because its parent process has not yet read its exit status.
+
+
+
+root@ip-172-31-36-61:/# nohup df -h
+nohup: ignoring input and appending output to 'nohup.out'
+root@ip-172-31-36-61:/# ls -lrth
+total 80K
+drwxr-xr-x   2 root root 4.0K Feb 26  2024 bin.usr-is-merged
+drwxr-xr-x   2 root root 4.0K Mar 31  2024 sbin.usr-is-merged
+drwxr-xr-x   2 root root 4.0K Apr  8  2024 lib.usr-is-merged
+lrwxrwxrwx   1 root root    8 Apr 22  2024 sbin -> usr/sbin
+lrwxrwxrwx   1 root root    9 Apr 22  2024 lib64 -> usr/lib64
+lrwxrwxrwx   1 root root    7 Apr 22  2024 lib -> usr/lib
+lrwxrwxrwx   1 root root    7 Apr 22  2024 bin -> usr/bin
+drwxr-xr-x   2 root root 4.0K Nov  9 08:39 mnt
+drwxr-xr-x   2 root root 4.0K Nov  9 08:39 srv
+drwxr-xr-x   2 root root 4.0K Nov  9 08:39 opt
+drwxr-xr-x   2 root root 4.0K Nov  9 08:39 media
+drwxr-xr-x  12 root root 4.0K Nov  9 08:39 usr
+drwx------   2 root root  16K Nov  9 08:43 lost+found
+drwxr-xr-x   6 root root 4.0K Nov  9 08:47 snap
+dr-xr-xr-x 175 root root    0 Dec 15 11:26 proc
+drwxr-xr-x  13 root root 4.0K Dec 15 11:26 var
+drwxr-xr-x   3 root root 4.0K Dec 15 11:26 home
+drwxr-xr-x  16 root root 3.2K Dec 15 11:26 dev
+drwxr-xr-x   5 root root 4.0K Dec 15 11:49 boot
+drwxr-xr-x 108 root root 4.0K Dec 15 11:49 etc
+drwxr-xr-x  28 root root  920 Dec 15 11:49 run
+drwxrwxrwt  12 root root 4.0K Dec 15 11:50 tmp
+dr-xr-xr-x  13 root root    0 Dec 15 11:53 sys
+drwx------   5 root root 4.0K Dec 15 12:03 root
+-rw-------   1 root root  372 Dec 15 12:26 nohup.out
+root@ip-172-31-36-61:/# cat nohup.out
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       6.8G  2.0G  4.8G  30% /
+tmpfs           479M     0  479M   0% /dev/shm
+tmpfs           192M  896K  191M   1% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock
+/dev/xvda16     881M   76M  744M  10% /boot
+/dev/xvda15     105M  6.1M   99M   6% /boot/efi
+tmpfs            96M   12K   96M   1% /run/user/1000
+root@ip-172-31-36-61:/#
